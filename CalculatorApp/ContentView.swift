@@ -10,18 +10,18 @@ import SwiftUI
 struct ContentView: View
 {
     let grid = [
-           ["AC", "⌦", "%", "/"],
-           ["7", "8", "9", "X"],
-           ["4", "5", "6", "-"],
-           ["1", "2", "3", "+"],
-           [".", "0", "", "="]
-       ]
-       
-       let operators = ["/", "+", "X", "%"]
-       
-       @State var working = ""
-       @State var result = ""
-       @State var alert = false
+        ["AC", "⌦", "%", "/"],
+        ["7", "8", "9", "X"],
+        ["4", "5", "6", "-"],
+        ["1", "2", "3", "+"],
+        [".", "0", "", "="]
+    ]
+    
+    let operators = ["/", "+", "X", "%"]
+    
+    @State var working = ""
+    @State var result = ""
+    @State var alert = false
     
     var body: some View
     {
@@ -53,9 +53,9 @@ struct ContentView: View
                     {
                         cell in
                         
-                        Button(action: { buttonPressed(cell: cell)}, label: {
+                        Button(action: { btnPressed(cell: cell)}, label: {
                             Text(cell)
-                                .foregroundColor(buttonColor(cell))
+                                .foregroundColor(btnColor(cell))
                                 .font(.system(size: 40, weight: .heavy))
                                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                             
@@ -78,9 +78,64 @@ struct ContentView: View
             )
         }
     }
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
+    
+    func btnColor(_ cell: String) -> Color
+    {
+        if(cell == "AC" || cell == "⌦")
+        {
+            return .red
+        }
+        
+        if(cell == "-" || cell == "=" || operators.contains(cell))
+        {
+            return .orange
+        }
+        
+        return .white
     }
+    
+    func btnPressed(cell: String)
+    {
+        
+        switch (cell)
+        {
+        case "AC":
+            working = ""
+            result = ""
+        case "⌦":
+            working = String(working.dropLast())
+        case "=":
+            result =
+        case "-":
+            minus()
+        case "X", "/", "%", "+":
+            add(cell)
+        default:
+            working += cell
+        }
+        
+    }
+    
+    func add(_ cell : String)
+    {
+        if !working.isEmpty
+        {
+            let last = String(working.last!)
+            if operators.contains(last)
+            {
+                working.removeLast()
+            }
+            working += cell
+        }
+    }
+    
+    func minus()
+    {
+        if working.isEmpty || working.last! != "-"
+        {
+            working += "-"
+        }
+    }
+    
+    
 }
