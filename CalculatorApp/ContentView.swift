@@ -105,7 +105,7 @@ struct ContentView: View
         case "⌦":
             working = String(working.dropLast())
         case "=":
-            result =
+            result = calResults()
         case "-":
             minus()
         case "X", "/", "%", "+":
@@ -137,5 +137,53 @@ struct ContentView: View
         }
     }
     
+    func calResults() -> String
+    {
+        if(input())
+        {
+            var workings = workings.replacingOccurrences(of: "%", with: "*0.01")
+            workings = workings.replacingOccurrences(of: "X", with: "*")
+            let expression = NSExpression(format: workings)
+            let result = expression.expressionValue(with: nil, context: nil) as! Double
+            return format(val: result)
+        }
+        showAlert = true
+        return ""
+    }
+    
+    func input() -> Bool
+    {
+        if(working.isEmpty)
+        {
+            return false
+        }
+        let last = String(working.last!)
+        
+        if(operators.contains(last) || last == "-")
+        {
+            if(last != "%" || working.count == 1)
+            {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func format(val : Double) -> String
+    {
+        if(val.truncatingRemainder(dividingBy: 1) == 0)
+        {
+            return String(format: "%.0f", val)
+        }
+        
+        return String(format: "%.2f", val)
+    }
     
 }
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+
