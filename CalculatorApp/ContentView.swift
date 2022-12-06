@@ -141,13 +141,13 @@ struct ContentView: View
     {
         if(input())
         {
-            var workings = workings.replacingOccurrences(of: "%", with: "*0.01")
+            var workings = working.replacingOccurrences(of: "%", with: "*0.01")
             workings = workings.replacingOccurrences(of: "X", with: "*")
             let expression = NSExpression(format: workings)
             let result = expression.expressionValue(with: nil, context: nil) as! Double
             return format(val: result)
         }
-        showAlert = true
+        alert = true
         return ""
     }
     
